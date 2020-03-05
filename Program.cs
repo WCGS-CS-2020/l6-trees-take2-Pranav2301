@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace L6Trees
+namespace Tree_implementation
 {
-
     /*
      * Tasks:
      * 1) Complete the implementation of the Node methods
@@ -14,41 +16,110 @@ namespace L6Trees
     class Node
     {
         // Attributes
-        private  Node left;
-        private  Node right;
-        private string item;
-
+        public Node left;
+        public Node right;
+        public string item;
+        public Node(string i)
+        {
+            this.left = null;
+            this.right = null;
+            this.item = i;
+        }
+        public int getFirstChar()
+        {
+            return (int)item[0];
+        }
+    }
+    class Tree
+    {
+         public Node Root;
         //Methods
-        public Node(string item) { }
-        public void addNode(string item) {}
-        public Boolean findNode(string item) { return true; }
-        public Boolean deleteNote(string item) { return true; }
-        void printTree() { }
+        public Tree(string root)
+        {
+            this.Root = new Node(root);
+        }
+        public void add(string value)
+        {
+            Node curNode = this.Root;
+            while (curNode.left != null && curNode.right != null)
+            {
+                if (curNode.left.getFirstChar() < curNode.getFirstChar())
+                {
+                    curNode = curNode.left;
+                }
+                else if (curNode.right.getFirstChar() > curNode.getFirstChar())
+                {
+                    curNode = curNode.right;
+                }
+            }
+            if ((int)value[0] < curNode.getFirstChar())
+            {
+                curNode.left = new Node(value);
+            }
+            else if ((int)value[0] > curNode.getFirstChar())
+            {
+                curNode.right = new Node(value);
+            }
+        }
+        public Boolean findNode(string item)
+        {
+            return true;
+        }
+        public Boolean deleteNote(string item)
+        {
+            return true;
+        }
+        public void printPreOrder(Node node)
+        {
+            if (node != null)
+            {
+            Console.WriteLine("{0}, ", node.item);
+            printPreOrder(node.left);
+            printPreOrder(node.right); 
+            }
+        }
+        public void printInOrder(Node node)
+        {
+            if (node != null)
+            {
+                printInOrder(node.left);
+                Console.WriteLine("{0}, ", node.item);
+                printInOrder(node.right);
+            }
+        }
+        public void printPostOrder(Node node)
+        {
+            if (node != null)
+            {
+                printPreOrder(node.left);
+                printPreOrder(node.right);
+                Console.WriteLine("{0}, ", node.item);
+            }
+        }
     }
 
     class Program
     {
         static void Main(string[] args)
         {
-            Node root = null;
+            //Node root = null; 
 
             string[] months = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
-
-
+            Tree test = new Tree(months[0]);
             // process all the nodes on the array
             //
-            foreach (var mon in months)
+            for (int i = 1; i < months.Length - 1; i++)
             {
-                if (root == null)
-                    root = new Node(mon);
-                else
-                    root.addNode(mon);
+                test.add(months[i]);
             }
-
             // print out the tree using different traversal methods
             //
+            test.printPreOrder(test.Root);
+            test.printInOrder(test.Root);
+            test.printPostOrder(test.Root);
 
             // Test the findNote() and deleteNode()
         }
     }
 }
+
